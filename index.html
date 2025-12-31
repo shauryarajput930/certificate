@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a18;
+            --bg-gradient: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            --neon-accent: #7d5fff;
+            --text-light: #f8f9fa;
+            --card-bg: rgba(31, 31, 56, 0.95);
+            --glow: 0 0 20px rgba(125, 95, 255, 0.4);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: none;
+        }
+        /* Custom Cursor Styles */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            transition: 
+                transform 0.3s ease,
+                width 0.3s ease,
+                height 0.3s ease;
+            z-index: 9999;
+            box-shadow: 0 0 15px var(--neon-accent);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--neon-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: trailFade 0.6s forwards;
+            z-index: 9998;
+        }
+
+        .cursor-click {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--neon-accent);
+            border-radius: 50%;
+            animation: clickEffect 0.5s ease-out forwards;
+            pointer-events: none;
+            z-index: 9997;
+        }
+
+        /* Cyberpunk Elements */
+        .cyber-border {
+            position: relative;
+            border: 2px solid var(--neon-accent);
+            box-shadow: var(--glow);
+        }
+
+        .cyber-border::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, 
+                transparent 47%, 
+                var(--neon-accent) 50%, 
+                transparent 53%);
+            background-size: 300% 300%;
+            animation: cyber-line 4s linear infinite;
+            z-index: -1;
+        }
+
+        /* Certificate Cards */
+        .certificate-card {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 15px;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow: hidden;
+            margin: 1.5rem;
+            width: 320px;
+        }
+
+        .certificate-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.1) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: skewX(-20deg);
+            animation: hologram 3s infinite;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-15px) rotateX(10deg) rotateY(10deg);
+            filter: brightness(1.2);
+        }
+
+        /* Matrix Rain Background */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, 
+                var(--neon-accent) 20%, 
+                transparent 100%);
+            border-radius: 50%;
+            animation: float-particle 20s infinite linear;
+        }
+
+        /* Content Styling */
+        .certificates-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 5%;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .certificate-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .certificate-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s;
+        }
+
+        .certificate-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg,
+                transparent 0%,
+                rgba(125, 95, 255, 0.1) 50%,
+                transparent 100%);
+            animation: scanline 6s infinite linear;
+        }
+
+        .certificate-info {
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .certificate-info h3 {
+            margin: 0;
+            font-size: 1.4rem;
+            background: linear-gradient(45deg, #fff 60%, var(--neon-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .view-button {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background: transparent;
+            border: 2px solid var(--neon-accent);
+            color: var(--text-light);
+            overflow: hidden;
+            transition: all 0.6s;
+            text-decoration: none;
+        }
+
+        .view-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 0;
+            height: 300%;
+            background: var(--neon-accent);
+            transition: all 0.6s;
+            z-index: -1;
+        }
+
+        .view-button:hover::before {
+            width: 120%;
+        }
+
+        .view-button:hover {
+            color: var(--bg-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--neon-accent);
+        }
+
+        /* Animations */
+        @keyframes hologram {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        @keyframes cyber-line {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 300% 300%; }
+        }
+
+        @keyframes float-particle {
+            0% { transform: translateY(100vh) scale(0); }
+            100% { transform: translateY(-100vh) scale(1); }
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        @keyframes clickEffect {
+            0% { opacity: 1; transform: scale(0); }
+            100% { opacity: 0; transform: scale(2); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--neon-accent)); }
+            50% { filter: drop-shadow(0 0 20px var(--neon-accent)); }
+        }
+
+        .section-header {
+            text-align: center;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            position: relative;
+            display: inline-block;
+            animation: neonPulse 2s infinite;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 3px;
+            width: 80%;
+            background: var(--neon-accent);
+            box-shadow: var(--glow);
+        }
+        /* Footer */
+      footer {
+        text-align: center;
+        padding: 40px 20px;
+        margin-top: 50px;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-darker);
+        font-size: 1rem;
+        background-color: var(--bg-dark);
+        position: relative;
+      }
+
+      footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+      }
+
+      footer .fa-heart {
+          color: var(--accent-color);
+          margin: 0 5px;
+          animation: heartbeat 1.5s infinite;
+      }
+
+      @keyframes heartbeat {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.1); }
+        50% { transform: scale(1); }
+        75% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+      }
+
+      footer .location-info {
+          display: block;
+          margin-top: 5px;
+          font-size: 0.9em;
+          color: var(--text-darker);
+      }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .certificates-container {
+        grid-template-columns: 1fr;
+        padding: 2rem 5%;
+        gap: 1rem;
+    }
+
+    .certificate-card {
+        width: 90%;
+        margin: 1rem auto;
+    }
+
+    .certificate-image {
+        height: 150px;
+    }
+
+    .certificate-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .view-button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .section-header h2 {
+        font-size: 2rem;
+        padding: 2rem 0;
+    }
+
+    .certificate-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    footer {
+        padding: 20px 10px;
+        font-size: 0.9rem;
+    }
+
+    footer .location-info {
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .certificate-card {
+        width: 95%;
+    }
+
+    .certificate-info {
+        padding: 1rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Touch device adjustments */
+@media (hover: none) and (pointer: coarse) {
+    .custom-cursor,
+    .matrix-rain,
+    .particles {
+        display: none !important;
+    }
+
+    .certificate-card:hover {
+        transform: none;
+        filter: none;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="custom-cursor"></div>
+    <canvas class="matrix-rain" id="matrixCanvas"></canvas>
+    <div class="particles" id="particles"></div>
+
+    <section id="certificates">
+        <div class="section-header">
+            <h2>Certification Achievements</h2>
+        </div>
+        <div class="certificates-container">
+            <!-- Generative AI -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/Generative AI.jpg" alt="Generative AI Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>Generative AI</h3>
+                    <p>AWS Training & Certification</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/Generative AI.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/Generative AI.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">22 December 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Introduction to Modern AI -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/Introduction to Modern AI.jpg" alt="Data Science Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>Introduction to Modern AI</h3>
+                    <p>via Cisco</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/Introduction to Modern AI.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/Introduction to Modern AI.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">30 December 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JavaScript Essentials 1 -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/JavaScript Essentials 1.jpg" alt="Data Science Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>JavaScript Essentials 1</h3>
+                    <p>via Cisco</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/JavaScript Essentials 1.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/JavaScript Essentials 1.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">30 December 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master Data Management for Beginners -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/TCS MasterCra TM DataPlus.jpg" alt="Computer Vision Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>DataPlus Overview Course</h3>
+                    <p>TCS MasterCraft DataPlus</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/TCS MasterCra TM DataPlus.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/TCS MasterCra TM DataPlus.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">17 December 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master Data Management -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/Master Data Management for Beginners.jpg" alt="C Programming Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>Master Data Management</h3>
+                    <p>via TCS</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/Master Data Management for Beginners.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/Master Data Management for Beginners.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">23 December 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programming Fundamentals using Python - Part 1 -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/Programming Fundamentals using Python part 1.jpg" alt="Python Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>Programming Fundamentals using Python - Part 1</h3>
+                    <p>via Infosys</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/Programming Fundamentals using Python part 1.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/Programming Fundamentals using Python part 1.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">04 September 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programming Fundamentals using Python - Part 2 -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/Programming Fundamentals using Python part 2.jpg" alt="Python Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>Programming Fundamentals using Python - Part 2</h3>
+                    <p>via Infosys</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/Programming Fundamentals using Python part 2.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/Programming Fundamentals using Python part 2.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">30 September 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSS Certificate -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/css certificate.jpg" alt="Data Science Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>CSS</h3>
+                    <p>via HackerRank</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/css certificate.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/css certificate.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">26 September 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- International Conference -->
+            <div class="certificate-card cyber-border">
+                <div class="certificate-image">
+                    <img src="./assets/International conference.jpg" alt="C Basics Certificate">
+                </div>
+                <div class="certificate-info">
+                    <h3>International Conference</h3>
+                    <p>via PSIT</p>
+                    <div class="certificate-actions">
+                        <a href="./assets/International conference.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./assets/International conference.pdf" target="_blank" class="view-button">
+                            <i class="fas fa-expand"></i> View
+                        </a>
+                    </div>
+                    <div class="certificate-meta">
+                        <span class="certificate-date">28 February 2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="animate__animated animate__fadeIn animate__delay-1s">
+        <p>&copy; 2025 Shaurya Rajput <span class="location-info">Kanpur, Uttar Pradesh, India</span></p>
+    </footer>
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let trailDelay = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            if (trailDelay % 3 === 0) {
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = `${e.pageX - 3}px`;
+                trail.style.top = `${e.pageY - 3}px`;
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 600);
+            }
+            trailDelay++;
+        });
+
+        document.addEventListener('click', (e) => {
+            const clickEffect = document.createElement('div');
+            clickEffect.className = 'cursor-click';
+            clickEffect.style.left = `${e.pageX - 20}px`;
+            clickEffect.style.top = `${e.pageY - 20}px`;
+            document.body.appendChild(clickEffect);
+            setTimeout(() => clickEffect.remove(), 500);
+        });
+
+        document.querySelectorAll('a, button, .certificate-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(1.5)';
+                cursor.style.background = 'rgba(125, 95, 255, 0.3)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.background = 'transparent';
+            });
+        });
+
+        // Matrix Rain Effect
+        const matrixCanvas = document.getElementById('matrixCanvas');
+        const ctx = matrixCanvas.getContext('2d');
+        matrixCanvas.width = window.innerWidth;
+        matrixCanvas.height = window.innerHeight;
+        
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const drops = Array(Math.floor(matrixCanvas.width/10)).fill(0);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = '14px monospace';
+
+            drops.forEach((drop, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i*10, drop*10);
+                drops[i] = (drop * 10 > matrixCanvas.height || Math.random() > 0.95) ? 0 : drop + 1;
+            });
+        }
+        setInterval(drawMatrix, 50);
+
+        // Floating Particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for(let i = 0; i < 100; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.width = particle.style.height = 
+                    `${Math.random() * 3 + 2}px`;
+                particle.style.animationDelay = `${Math.random() * 20}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Smooth Cursor Movement
+        function smoothMove() {
+            requestAnimationFrame(smoothMove);
+            const currentX = parseFloat(cursor.style.left) || 0;
+            const currentY = parseFloat(cursor.style.top) || 0;
+            cursor.style.left = `${currentX + (mouseX - currentX - 10) * 0.2}px`;
+            cursor.style.top = `${currentY + (mouseY - currentY - 10) * 0.2}px`;
+        }
+        smoothMove();
+
+        // Card Hover Effect
+        document.querySelectorAll('.certificate-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateX(${(y - rect.height/2) / 10}deg)
+                    rotateY(${-(x - rect.width/2) / 10}deg)
+                    translateZ(20px)
+                    translateY(-15px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+            });
+        });
+        // Add this to the existing JavaScript
+// Touch device detection
+if ('ontouchstart' in window) {
+    document.documentElement.classList.add('touch-device');
+}
+
+// Update card hover effects for mobile
+document.querySelectorAll('.certificate-card').forEach(card => {
+    card.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            card.classList.toggle('mobile-active');
+        }
+    });
+});
+    </script>
+</body>
+</html>
