@@ -55,28 +55,36 @@ certificate/
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Local web server (optional, for testing)
+- Node.js (v18+ recommended) or any modern web browser
+- NPM (included with Node.js)
 
-### Installation
+### Installation & Launching Server
 1. Clone or download the project
-2. Navigate to the project directory
-3. Open `index.html` in your browser
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the Cyberpunk Full-Stack server:
+   ```bash
+   npm start
+   ```
+4. Access the web applications:
+   - **Portfolio**: [http://localhost:3000](http://localhost:3000)
+   - **Admin Command Console**: [http://localhost:3000/admin](http://localhost:3000/admin)
+   - **Default Admin PIN**: `2026` (Customizable directly inside the admin console)
 
-### Local Development
-For local development with a web server:
-```bash
-# Using Python
-python -m http.server 8000
+### 🔐 Admin Dashboard Features (`/admin`)
+- **Security Gatekeeper**: Holographic PIN keypad & session lock (Default PIN: `2026`).
+- **Drag & Drop Upload**: Upload Certificate Badge images (JPG/PNG/WebP) and PDF documents with instant preview.
+- **Live Hologram Preview**: Real-time 3D interactive replica card updating live as you type.
+- **Certificate Registry**: Search, filter by category/issuer, edit, and delete certificates.
+- **Export & Backup**: One-click JSON backup export and sync.
+- **Hybrid Storage Architecture**: Real Multer file saving to `/assets/` when running `npm start`, with instant automatic LocalStorage/IndexedDB fallback if hosted statically on GitHub Pages or Live Server.
 
-# Using Node.js
-npx serve .
-
-# Using PHP
-php -S localhost:8000
-```
-
-Then visit `http://localhost:8000` in your browser.
+### Static / Offline Development
+If running without Node.js:
+- Open `index.html` directly or run `npx serve .` / Live Server.
+- Open `admin/index.html` or visit `/admin` in your local server. All certificates and uploads will be stored in your browser's persistent client vault!
 
 ## 🎨 Customization
 

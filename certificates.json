@@ -1,0 +1,119 @@
+[
+  {
+    "id": "sql-advanced",
+    "title": "SQL (Advanced)",
+    "issuer": "via HackerRank",
+    "date": "18 October 2026",
+    "image": "./assets/sql_advanced certificate.jpg",
+    "pdf": "./assets/sql_advanced certificate.pdf",
+    "category": "Database"
+  },
+  {
+    "id": "sql-basic",
+    "title": "SQL (Basic)",
+    "issuer": "via HackerRank",
+    "date": "18 October 2026",
+    "image": "./assets/sql_basic certificate.jpg",
+    "pdf": "./assets/sql_basic certificate.pdf",
+    "category": "Database"
+  },
+  {
+    "id": "codsoft-internship",
+    "title": "Web Development Internship",
+    "issuer": "via CodSoft",
+    "date": "1 September 2026",
+    "image": "./assets/CodSoft Internship.jpg",
+    "pdf": "./assets/CodSoft Internship.pdf",
+    "category": "Web Development"
+  },
+  {
+    "id": "python-data-science",
+    "title": "Python for Data Science",
+    "issuer": "via Infosys",
+    "date": "23 February 2026",
+    "image": "./assets/Python for Data Science.jpg",
+    "pdf": "./assets/Python for Data Science.pdf",
+    "category": "Data Science & Python"
+  },
+  {
+    "id": "intro-modern-ai",
+    "title": "Introduction to Modern AI",
+    "issuer": "via Cisco",
+    "date": "30 December 2025",
+    "image": "./assets/Introduction to Modern AI.jpg",
+    "pdf": "./assets/Introduction to Modern AI.pdf",
+    "category": "Artificial Intelligence"
+  },
+  {
+    "id": "js-essentials-1",
+    "title": "JavaScript Essentials 1",
+    "issuer": "via Cisco",
+    "date": "30 December 2025",
+    "image": "./assets/JavaScript Essentials 1.jpg",
+    "pdf": "./assets/JavaScript Essentials 1.pdf",
+    "category": "Web Development"
+  },
+  {
+    "id": "generative-ai",
+    "title": "Generative AI",
+    "issuer": "AWS Training & Certification",
+    "date": "22 December 2025",
+    "image": "./assets/Generative AI.jpg",
+    "pdf": "./assets/Generative AI.pdf",
+    "category": "Artificial Intelligence"
+  },
+  {
+    "id": "master-data-management",
+    "title": "Master Data Management",
+    "issuer": "via TCS",
+    "date": "23 December 2025",
+    "image": "./assets/Master Data Management for Beginners.jpg",
+    "pdf": "./assets/Master Data Management for Beginners.pdf",
+    "category": "Data Management"
+  },
+  {
+    "id": "dataplus-course",
+    "title": "DataPlus Overview Course",
+    "issuer": "TCS MasterCraft DataPlus",
+    "date": "17 December 2025",
+    "image": "./assets/TCS MasterCra TM DataPlus.jpg",
+    "pdf": "./assets/TCS MasterCra TM DataPlus.pdf",
+    "category": "Data Management"
+  },
+  {
+    "id": "css-certificate",
+    "title": "CSS",
+    "issuer": "via HackerRank",
+    "date": "26 September 2025",
+    "image": "./assets/css certificate.jpg",
+    "pdf": "./assets/css certificate.pdf",
+    "category": "Web Development"
+  },
+  {
+    "id": "python-part-2",
+    "title": "Programming Fundamentals using Python - Part 2",
+    "issuer": "via Infosys",
+    "date": "30 September 2025",
+    "image": "./assets/Programming Fundamentals using Python part 2.jpg",
+    "pdf": "./assets/Programming Fundamentals using Python part 2.pdf",
+    "category": "Programming"
+  },
+  {
+    "id": "python-part-1",
+    "title": "Programming Fundamentals using Python - Part 1",
+    "issuer": "via Infosys",
+    "date": "04 September 2025",
+    "image": "./assets/Programming Fundamentals using Python part 1.jpg",
+    "pdf": "./assets/Programming Fundamentals using Python part 1.pdf",
+    "category": "Programming"
+  },
+  {
+    "id": "international-conference",
+    "title": "International Conference",
+    "issuer": "via PSIT",
+    "date": "28 February 2025",
+    "image": "./assets/International conference.jpg",
+    "pdf": "./assets/International conference.pdf",
+    "category": "Academic"
+  }
+]
