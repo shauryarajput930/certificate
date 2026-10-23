@@ -1,257 +1,199 @@
 # Certificate Portfolio
 
-A stunning cyberpunk-themed certificate portfolio website showcasing technical certifications and achievements.
+A state-of-the-art cyberpunk-themed technical certificate portfolio and full-stack admin command console built with pure HTML5, CSS3, JavaScript, Node.js (Express 5), and Multer.
 
-## 🎯 Features
+![CyberVault Banner](https://img.shields.io/badge/CYBERVAULT-v2.5-7d5fff?style=for-the-badge&logo=shield&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5.x-00f2fe?style=for-the-badge&logo=express&logoColor=black)
+![NodeJS](https://img.shields.io/badge/Node.js-18+-05ffa1?style=for-the-badge&logo=node.js&logoColor=black)
+![Multer](https://img.shields.io/badge/Storage-Multer%20Disk-ff3366?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Fully%20Responsive-ffaa00?style=for-the-badge)
 
-### Visual Design
-- **Cyberpunk Theme**: Futuristic design with neon purple accents and matrix rain effects
-- **3D Animations**: Interactive certificate cards with perspective transforms
-- **Custom Cursor**: Animated cursor with trail effects and click animations
-- **Particle System**: Floating particles for visual depth
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+---
 
-### Certificate Management
-- **11 Certificates**: Displayed in an elegant grid layout
-- **Dual Actions**: Download and view options for each certificate
-- **Metadata**: Certificate dates and issuing organizations
-- **Touch Support**: Optimized interactions for mobile devices
+## 🌐 Quick Access URLs
 
-### Technical Stack
-- **Pure HTML/CSS/JavaScript**: No external frameworks required
-- **CSS Grid**: Modern layout system for responsive design
-- **Canvas API**: Matrix rain background animation
-- **CSS Animations**: Smooth transitions and hover effects
+| Interface | URL | Description |
+| :--- | :--- | :--- |
+| **Public Portfolio** | [http://localhost:3000](http://localhost:3000) | Public cyberpunk portfolio showcasing 13+ verified technical credentials |
+| **Admin Console** | [http://localhost:3000/admin](http://localhost:3000/admin) | Command console for deploying, editing, and managing certificates |
+| **Default Security PIN** | `2026` | Enter on the Security Gatekeeper keypad (Customizable in `/admin`) |
+
+---
+
+## 🎯 Key Features
+
+### 1. 🛡️ Public Certificate Showcase (`/`)
+- **Cyberpunk Aesthetic**: High-energy neon glow (purple, cyan, emerald), Matrix green rain digital background on HTML5 Canvas, and floating background particles.
+- **Interactive 3D Cards**: GPU-accelerated 3D perspective tilt reacting to mouse position, holographic shimmer animations, and glassmorphism cards.
+- **Dynamic Certificate Loader**: Automatically fetches certificates from `/api/certificates` (Node.js server) with a seamless fallback to `localStorage` / seed data for static deployments.
+- **Dual Action Triggers**: Download or view certificate badges and PDF documents in high resolution.
+- **Floating Command Console Button**: Instant cyberpunk `/admin` launcher button floating in the bottom-right corner.
+
+### 2. 🔐 Admin Command Console (`/admin`)
+- **Security Gatekeeper**: Holographic PIN keypad & session authentication modal with visual feedback, digit masking, and session persistence.
+- **Drag-and-Drop Deployment**: Dedicated dropzones for Certificate Badge images (JPG, PNG, WebP) and PDF documents with instant file size and name metadata chips.
+- **Real-Time Holographic 3D Preview**: A 1:1 live replica of the portfolio card on the right-hand panel that reacts in real-time as you type the title, issuer, date, or drop an image.
+- **Deployed Certificates Registry**:
+  - **Live Search**: Instant search bar with isolated password management to prevent browser autofill.
+  - **Category Pills Filter**: Dynamic filter buttons with live counts for all certificate disciplines.
+  - **Edit Certificate Modal**: Update certificate title, issuing organization, issue date, category, verification URL, or replace badge images/PDF documents.
+  - **Delete & Removal**: Instantly remove outdated credentials from both the server disk and JSON registry.
+  - **Export & Backup**: One-click JSON backup export (`certificates_backup_*.json`) for safeguarding records.
+- **Full Mobile Responsiveness**:
+  - Animated Cyber Hamburger Drawer triggered on tablets and phones (`<= 992px`).
+  - Strict zero-overflow viewport constraints (`overflow-x: hidden`).
+  - Auto-scrolling PIN gatekeeper keypad for small screens and landscape orientation.
+  - Responsive single-column grid transformation for mobile screens.
+
+---
 
 ## 📁 Project Structure
 
 ```
-certificate/
-├── index.html              # Main portfolio page
+Certification/
+├── index.html              # Main public certificate portfolio
+├── server.js               # Express 5 backend with Multer upload & REST API
+├── certificates.json       # Central certificate registry database
+├── admin_config.json       # Secure admin settings (PIN & secret) - gitignored
+├── package.json            # Node.js project dependencies & start scripts
+├── .gitignore              # Git exclusions (node_modules, credentials, logs)
 ├── README.md               # Project documentation
-└── assets/                 # Certificate files
-    ├── Generative AI.jpg
-    ├── Generative AI.pdf
+├── admin/
+│   └── index.html          # CyberVault Admin Command Console UI
+└── assets/                 # Certificate badge images and PDF documents
+    ├── sql_advanced certificate.jpg
+    ├── sql_advanced certificate.pdf
+    ├── sql_basic certificate.jpg
+    ├── sql_basic certificate.pdf
+    ├── CodSoft Internship.jpg
+    ├── CodSoft Internship.pdf
+    ├── Python for Data Science.jpg
+    ├── Python for Data Science.pdf
     ├── Introduction to Modern AI.jpg
     ├── Introduction to Modern AI.pdf
     ├── JavaScript Essentials 1.jpg
     ├── JavaScript Essentials 1.pdf
+    ├── Generative AI.jpg
+    ├── Generative AI.pdf
     ├── Master Data Management for Beginners.jpg
     ├── Master Data Management for Beginners.pdf
-    ├── Programming Fundamentals using Python part 1.jpg
-    ├── Programming Fundamentals using Python part 1.pdf
-    ├── Programming Fundamentals using Python part 2.jpg
-    ├── Programming Fundamentals using Python part 2.pdf
-    ├── Python for Data Science.jpg
-    ├── Python for Data Science.pdf
     ├── TCS MasterCra TM DataPlus.jpg
     ├── TCS MasterCra TM DataPlus.pdf
     ├── css certificate.jpg
     ├── css certificate.pdf
+    ├── Programming Fundamentals using Python part 1.jpg
+    ├── Programming Fundamentals using Python part 1.pdf
+    ├── Programming Fundamentals using Python part 2.jpg
+    ├── Programming Fundamentals using Python part 2.pdf
     ├── International conference.jpg
     └── International conference.pdf
 ```
 
+---
+
+## 💾 Storage Architecture: Where Files Are Saved
+
+When you deploy or edit a certificate via the Admin Dashboard:
+
+| Resource | Storage Destination | Description |
+| :--- | :--- | :--- |
+| **Badge Images** | `assets/<filename>_<timestamp>.ext` | Stored on the local disk inside the [`assets/`](file:///d:/PSIT/Sem%204/FSD/Certification/assets) folder via Multer. Filename is sanitized with a unique timestamp to prevent overwrites. |
+| **PDF Documents** | `assets/<filename>_<timestamp>.pdf` | Uploaded document stored on disk in [`assets/`](file:///d:/PSIT/Sem%204/FSD/Certification/assets). |
+| **Certificate Data** | [`certificates.json`](file:///d:/PSIT/Sem%204/FSD/Certification/certificates.json) | Stores title, issuer, issue date, category, credential URL, and asset relative path. |
+| **Admin Credentials** | `admin_config.json` | Stores the active admin PIN and security secrets (ignored by Git for privacy). |
+| **Offline Fallback** | `localStorage` (`cybervault_certificates`) | Base64-encoded client vault used if running purely statically without Node.js. |
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18+ recommended) or any modern web browser
-- NPM (included with Node.js)
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [npm](https://www.npmjs.com/) (bundled with Node.js)
 
-### Installation & Launching Server
-1. Clone or download the project
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/shauryarajput930/certificate.git
+   cd certificate
+   ```
+
 2. Install dependencies:
    ```bash
    npm install
    ```
-3. Start the Cyberpunk Full-Stack server:
+
+3. Launch the full-stack server:
    ```bash
    npm start
    ```
-4. Access the web applications:
+
+4. Open in browser:
    - **Portfolio**: [http://localhost:3000](http://localhost:3000)
-   - **Admin Command Console**: [http://localhost:3000/admin](http://localhost:3000/admin)
-   - **Default Admin PIN**: `2026` (Customizable directly inside the admin console)
+   - **Admin Console**: [http://localhost:3000/admin](http://localhost:3000/admin) *(Default PIN: `2026`)*
 
-### 🔐 Admin Dashboard Features (`/admin`)
-- **Security Gatekeeper**: Holographic PIN keypad & session lock (Default PIN: `2026`).
-- **Drag & Drop Upload**: Upload Certificate Badge images (JPG/PNG/WebP) and PDF documents with instant preview.
-- **Live Hologram Preview**: Real-time 3D interactive replica card updating live as you type.
-- **Certificate Registry**: Search, filter by category/issuer, edit, and delete certificates.
-- **Export & Backup**: One-click JSON backup export and sync.
-- **Hybrid Storage Architecture**: Real Multer file saving to `/assets/` when running `npm start`, with instant automatic LocalStorage/IndexedDB fallback if hosted statically on GitHub Pages or Live Server.
+---
 
-### Static / Offline Development
-If running without Node.js:
-- Open `index.html` directly or run `npx serve .` / Live Server.
-- Open `admin/index.html` or visit `/admin` in your local server. All certificates and uploads will be stored in your browser's persistent client vault!
+## 🔌 REST API Endpoints
 
-## 🎨 Customization
+The Express 5 server exposes the following RESTful API:
 
-### Adding New Certificates
-1. Add certificate image and PDF to the `assets/` folder
-2. Copy and modify this template in `index.html`:
+| Method | Endpoint | Description | Payload / Query |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/certificates` | Returns array of all deployed certificates | None |
+| `POST` | `/api/certificates` | Deploys a new certificate with Multer files | `multipart/form-data` (title, issuer, date, category, credentialUrl, image, pdf) |
+| `PUT` | `/api/certificates/:id` | Updates certificate metadata or replaces files | `multipart/form-data` |
+| `DELETE` | `/api/certificates/:id` | Deletes certificate from `certificates.json` and disk | None |
+| `GET` | `/api/stats` | Returns database statistics (total, issuers, categories) | None |
+| `POST` | `/api/auth/verify` | Verifies admin PIN passcode | `{ "pin": "2026" }` |
+| `POST` | `/api/auth/change-pin` | Updates the admin security PIN | `{ "currentPin": "2026", "newPin": "..." }` |
 
-```html
-<div class="certificate-card cyber-border">
-    <div class="certificate-image">
-        <img src="./assets/your-certificate.jpg" alt="Certificate Name">
-    </div>
-    <div class="certificate-info">
-        <h3>Certificate Name</h3>
-        <p>via Organization</p>
-        <div class="certificate-actions">
-            <a href="./assets/your-certificate.pdf" target="_blank" class="view-button">
-                <i class="fas fa-download"></i> Download
-            </a>
-            <a href="./assets/your-certificate.pdf" target="_blank" class="view-button">
-                <i class="fas fa-expand"></i> View
-            </a>
-        </div>
-        <div class="certificate-meta">
-            <span class="certificate-date">DD Month YYYY</span>
-        </div>
-    </div>
-</div>
-```
+---
 
-### Theme Customization
-Modify CSS variables in the `:root` section:
+## 📜 Certifications Included (13 Verified Credentials)
 
-```css
-:root {
-    --bg-dark: #0a0a18;
-    --bg-gradient: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-    --neon-accent: #7d5fff;
-    --text-light: #f8f9fa;
-    --card-bg: rgba(31, 31, 56, 0.95);
-    --glow: 0 0 20px rgba(125, 95, 255, 0.4);
-}
-```
+### 🤖 Artificial Intelligence & Machine Learning
+- **Generative AI** — *AWS Training & Certification* (Dec 2025)
+- **Introduction to Modern AI** — *Cisco* (Dec 2025)
 
-## 🎯 Certifications Included
+### 🗄️ Database & SQL
+- **SQL (Advanced)** — *HackerRank* (Oct 2026)
+- **SQL (Basic)** — *HackerRank* (Oct 2026)
 
-### AI & Machine Learning
-- **Generative AI** - AWS Training & Certification (Dec 2025)
-- **Introduction to Modern AI** - Cisco (Dec 2025)
+### 💻 Web Development & Programming
+- **Web Development Internship** — *CodSoft* (Sep 2026)
+- **JavaScript Essentials 1** — *Cisco* (Dec 2025)
+- **Programming Fundamentals using Python — Part 1** — *Infosys* (Sep 2025)
+- **Programming Fundamentals using Python — Part 2** — *Infosys* (Sep 2025)
+- **CSS** — *HackerRank* (Sep 2025)
 
-### Programming
-- **JavaScript Essentials 1** - Cisco (Dec 2025)
-- **Programming Fundamentals using Python Part 1** - Infosys (Sep 2025)
-- **Programming Fundamentals using Python Part 2** - Infosys (Sep 2025)
-- **CSS** - HackerRank (Sep 2025)
+### 📊 Data Science & Data Management
+- **Python for Data Science** — *Infosys* (Feb 2026)
+- **Master Data Management for Beginners** — *TCS* (Dec 2025)
+- **DataPlus Overview Course** — *TCS MasterCraft DataPlus* (Dec 2025)
 
-### Data Science
-- **Python for Data Science** - Infosys (Feb 2026)
+### 🎓 Academic & Conferences
+- **International Conference** — *PSIT* (Feb 2025)
 
-### Data Management
-- **DataPlus Overview Course** - TCS MasterCraft DataPlus (Dec 2025)
-- **Master Data Management for Beginners** - TCS (Dec 2025)
+---
 
-### Academic
-- **International Conference** - PSIT (Feb 2025)
+## 🛠️ Tech Stack & Architecture
 
-## 🛠️ Technical Details
+- **Frontend**: Vanilla HTML5, CSS3, ES6+ JavaScript, FontAwesome 6, Google Fonts (`Orbitron`, `Rajdhani`, `Inter`).
+- **Backend**: Node.js, Express 5, Multer (multipart disk storage), CORS.
+- **Styling**: Pure custom Vanilla CSS with CSS custom properties (variables), Flexbox, CSS Grid, 3D transforms, keyframe hologram animations, glassmorphism.
+- **Security**: Local PIN verification, isolated password contexts to eliminate browser autofill leakage, Git-ignored configuration store.
 
-### Performance Features
-- **Lazy Loading**: Images load as needed
-- **Optimized Animations**: GPU-accelerated CSS transforms
-- **Mobile Optimization**: Reduced effects on touch devices
-- **Responsive Images**: Scales appropriately for all screen sizes
-
-### Browser Compatibility
-- ✅ Chrome 60+
-- ✅ Firefox 55+
-- ✅ Safari 12+
-- ✅ Edge 79+
-
-### Accessibility
-- Semantic HTML5 structure
-- ARIA labels where appropriate
-- Keyboard navigation support
-- High contrast color scheme
-
-## 🔧 Configuration Options
-
-### Animation Settings
-```javascript
-// Matrix rain speed (milliseconds)
-setInterval(drawMatrix, 50);
-
-// Particle count
-for(let i = 0; i < 100; i++) // Adjust particle count
-
-// Cursor trail frequency
-if (trailDelay % 3 === 0) // Adjust trail density
-```
-
-### Responsive Breakpoints
-```css
-/* Tablet */
-@media (max-width: 768px)
-
-/* Mobile */
-@media (max-width: 480px)
-
-/* Touch devices */
-@media (hover: none) and (pointer: coarse)
-```
-
-## 📱 Mobile Features
-
-### Touch Optimizations
-- Disabled custom cursor on touch devices
-- Simplified hover effects
-- Touch-friendly button sizes
-- Optimized layout for small screens
-
-### Performance
-- Reduced particle effects
-- Simplified animations
-- Optimized image loading
-
-## 🚀 Future Enhancements
-
-### Planned Features
-- [ ] Search and filter functionality
-- [ ] Category-based organization
-- [ ] Certificate verification links
-- [ ] Social sharing capabilities
-- [ ] Dark/light theme toggle
-- [ ] Certificate progress tracking
-- [ ] Export to PDF functionality
-
-### Technical Improvements
-- [ ] Image optimization (WebP format)
-- [ ] Service worker for offline access
-- [ ] Progressive Web App (PWA) features
-- [ ] SEO optimization
-- [ ] Analytics integration
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+---
 
 ## 👤 Author
 
 **Shaurya Rajput**
-- Location: Kanpur, Uttar Pradesh, India
-- Portfolio: [shauryarajput.in](https://shauryarajput.in)
-- Alternative Portfolio: [shauryarajput930.netlify.app](https://shauryarajput930.netlify.app/)
-- Certificate Showcase: This project
-
-## 📞 Contact
-
-For questions or suggestions regarding this project, please reach out through the repository issues or contact channels.
+- **Portfolio**: [shauryarajput.in](https://shauryarajput.in)
+- **Alternative**: [shauryarajput930.netlify.app](https://shauryarajput930.netlify.app/)
+- **College**: PSIT Kanpur, Uttar Pradesh, India
+- **Repository**: [github.com/shauryarajput930/certificate](https://github.com/shauryarajput930/certificate)
 
 ---
 
-⭐ If you find this project helpful, consider giving it a star!
+⭐ If you find this cyberpunk project helpful, consider starring the repository!
